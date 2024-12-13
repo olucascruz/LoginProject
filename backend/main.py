@@ -1,8 +1,11 @@
-from fastapi import FastAPI, Form, UploadFile, File
+from fastapi import FastAPI, Form, UploadFile, File, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Any
 import os
+from data_modules.config import SessionLocal, engine
+from data_modules.models import User
+from sqlalchemy.orm import Session
 
 # Diretório onde os arquivos serão salvos
 UPLOAD_DIRECTORY = "uploads"
@@ -20,6 +23,13 @@ app.add_middleware(
     allow_headers=["*"],  # Cabeçalhos permitidos
 )
 
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
 
 @app.get("/")
 async def root():
@@ -28,24 +38,19 @@ async def root():
 @app.post("/data")
 async def post_one( user: str = Form(...),
     password: str = Form(...),
-    photo: UploadFile = File(...)
+    photo: UploadFile = File(...),
+    db:Session = Depends(get_db)
     ):
 
+    db_user = User(username=user, password=password)
+    db.add(db_user)
+    db.commit()
+    db.refresh(db_user)
 
     
-     # Define o caminho completo para salvar o arquivo
-    file_path = os.path.join(UPLOAD_DIRECTORY, photo.filename)
-
-    # Lê e grava o arquivo no diretório
-    with open(file_path, "wb") as file:
-        file_content = await photo.read()  # Lê o conteúdo do arquivo
-        file.write(file_content)  # Salva no disco
-
-
     print("User:", user)
     print("Password:", password)
     print("Photo filename:", photo.filename)
-    print("File size (bytes):", len(file_content))
     return {
         "message": "Dados recebidos com sucesso!",
         "user": user,
