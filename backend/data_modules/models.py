@@ -17,3 +17,12 @@ class Note(Base):
     content = Column(Text, nullable=False)
     created_at = Column(DateTime, default=datetime.datetime.now(datetime.timezone.utc))
     updated_at = Column(DateTime, default=datetime.datetime.now(datetime.timezone.utc))
+
+
+
+class Teste1(Base):
+    __tablename__ = "teste1"
+
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String(255), nullable=False)
+    test1 = Column(String(255), nullable=False)
