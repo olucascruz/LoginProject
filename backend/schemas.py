@@ -10,6 +10,7 @@ class UserPublic(BaseModel):
 
 class NoteSchema(BaseModel):
     id: int
+    user_id: int
     title:str
     content:str
     created_at:datetime
