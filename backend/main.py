@@ -102,7 +102,6 @@ async def get_current_user(
     token: Annotated[str, Depends(oauth2_scheme)],
     db:Session = Depends(get_db)
     ):
-    
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -169,11 +168,8 @@ async def get_all_notes(
     current_user: Annotated[User, Depends(get_current_user)],
     db:Session = Depends(get_db),
     ):
-
     notes = db.query(Note).filter(Note.user_id == current_user.id).all()
 
-    if not notes:
-        raise HTTPException(status_code=404, detail="Note not found")
     
     return notes
 
