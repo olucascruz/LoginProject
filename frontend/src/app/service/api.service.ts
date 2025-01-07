@@ -32,6 +32,7 @@ export class ApiService {
   tryGetTokenAccess(){
     const token = localStorage.getItem("accessToken");
     if(!token){
+      console.warn("Token não encontrado. Redirecionando para login...");
       window.location.href = "/";
       return null;
     }
@@ -44,7 +45,10 @@ export class ApiService {
       throw new Error("Token de acesso não encontrado. Faça login novamente.");
     }
     return new HttpHeaders({
-      'Authorization': `Bearer ${token}`
+      'Authorization': `Bearer ${token}`,
+      'Accept': 'application/json',
+      'Cache-Control': 'no-cache',
+      'Pragma': 'no-cache',
     });
   }
   constructor(private http: HttpClient) {}
@@ -71,15 +75,23 @@ export class ApiService {
     return this.http.put<any>(url, dataNote, {headers});
   }
 
-  getNotes(): Observable<NoteResponse[]>{
+  getNotes(): Observable<NoteResponse[]> | null{
     const url = this.apiUrl+'note'
     const headers = this.getHeaders()
-    return this.http.get<NoteResponse[]>(url, {headers});
+    const response = this.http.get<NoteResponse[]>(url, {headers});
+    console.log(response)
+    return response
   }
 
   getNoteById(id: number): Observable<NoteResponse> {
     const url = `${this.apiUrl}note/${id}`;
     const headers = this.getHeaders()
     return this.http.get<NoteResponse>(url, {headers});
+  }
+
+  deleteNote(id: number):any{
+    const url = `${this.apiUrl}note/${id}`;
+    const headers = this.getHeaders()
+    return this.http.delete<NoteResponse>(url, {headers});
   }
 }

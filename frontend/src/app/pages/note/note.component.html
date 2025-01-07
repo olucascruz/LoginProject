@@ -1,6 +1,28 @@
 <p>note works!</p>
-<ul>
-  <li *ngFor="let item of items">
-    {{ item }}
-  </li>
-</ul>
+<input type="text" placeholder="Title note" #new_title_note>
+<button (click)="createNote(new_title_note.value)">Create</button>
+<div *ngIf="notes$ | async as notes; else loading">
+  <ng-container *ngIf="notes.length > 0; else noNotes">
+    <ul >
+      <li *ngFor="let note of notes" class="noteItem">
+        <div class="noteTitle" (click)="goToNoteDetail(note.id)">
+        <p>{{ note.title }}</p>
+
+
+        <p>Modificated at: {{note.updated_at | date: 'dd/MM/yyyy HH:mm:ss'}}</p>
+      </div>
+      <div class="deleteButton" (click)="deleteNote(note.id)">
+        <p>x</p>
+      </div>
+      </li>
+    </ul>
+  </ng-container>
+</div>
+
+<ng-template #noNotes>
+  <p>Nenhuma nota encontrada. Crie sua primeira nota!</p>
+</ng-template>
+
+<ng-template #loading>
+  <p>Carregando...</p>
+</ng-template>

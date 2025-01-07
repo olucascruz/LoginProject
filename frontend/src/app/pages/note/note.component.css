@@ -1,0 +1,47 @@
+li{
+  margin: 0; /* Remove margins */
+  padding: 0; /* Remove padding */
+  width: 250px;
+  text-align: center;
+  border-bottom: 2px solid green;
+}
+
+li:hover{
+  cursor: pointer;
+  background-color: rgb(221, 226, 226);
+
+}
+
+li:active{
+  background-color: rgb(3, 51, 51);
+}
+ul{
+  list-style-type: none; /* Remove bullets */
+  padding: 0; /* Remove padding */
+  margin: 0; /* Remove margins */
+}
+
+li>p{
+margin-top: 0;
+}
+
+.noteTitle{
+  background-color: aqua;
+
+
+}
+
+.noteItem{
+  display: flex;
+}
+
+.deleteButton{
+  width: 30px;
+  margin-left: 10px;
+  background-color: rgb(255, 5, 5);
+
+}
+
+.deleteButton:hover{
+  background-color: rgb(134, 2, 2);
+}

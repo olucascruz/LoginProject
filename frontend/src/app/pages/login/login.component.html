@@ -1,18 +1,52 @@
-<h1>Register</h1>
-<form>
-  <p>
-  <label for="user"> Usuario: </label>
-  <input type="text" name="user" #user>
-  </p>
-  <p>
-    <label for="user"> Senha: </label>
-    <input type="text" name="password" #password>
-  </p>
-  <!-- <p><input type="file" name="photo" #photo></p> -->
+<div class="login-body">
 
-  <p>
-    <!-- <button type="button" (click)="enviar(user.value, password.value, photo.files)">Send</button> -->
-    <button type="button" (click)="sendData(user.value, password.value)">Register</button>
+  <div class="logo">
 
-  </p>
-</form>
+  </div>
+  <div *ngIf="!isRegisterForm" class="div-login">
+    <h1>Login</h1>
+    <form id="login-form">
+      <p>
+        <!-- <label for="user">Usuario:</label> -->
+        <input type="text" name="user" placeholder="Username" #user />
+      </p>
+      <p>
+        <!-- <label for="password">Senha:</label> -->
+        <input type="password" name="password" placeholder="Password" #password />
+      </p>
+      <p>
+        <button type="button" (click)="login(user.value, password.value)">Login</button>
+        <button type="button" (click)="toggleForm()">
+          {{ isRegisterForm ? 'Go to Login' : 'Go to Register' }}
+        </button>
+      </p>
+    </form>
+
+  </div>
+
+  <div *ngIf="isRegisterForm" class="div-login">
+    <h1>Register</h1>
+    <form id="register-form">
+      <p>
+        <!-- <label for="user">Usuario:</label> -->
+        <input type="text" name="user" placeholder="Username" #user />
+      </p>
+      <p>
+        <!-- <label for="password">Senha:</label> -->
+        <input type="password" name="password" placeholder="Password" #password />
+      </p>
+      <p>
+        <!-- <label for="confirm-password">Confirmar Senha:</label> -->
+        <input type="password" name="confirm-password"  placeholder="Confirm Password" #confirmPassword />
+      </p>
+      <p>
+        <button type="button" (click)="registerUser(user.value, password.value, confirmPassword.value)">
+          Register
+        </button>
+        <button type="button" (click)="toggleForm()">
+          {{ isRegisterForm ? 'Go to Login' : 'Go to Register' }}
+        </button>
+      </p>
+    </form>
+  </div>
+</div>
