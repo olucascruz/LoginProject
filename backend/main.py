@@ -6,7 +6,7 @@ from fastapi import FastAPI, Form, UploadFile, File, Depends, HTTPException, sta
 from fastapi.middleware.cors import CORSMiddleware
 from typing import Any
 import os
-from data_modules.config import SessionLocal, engine
+from backend.data_modules.database import get_db
 from data_modules.models import User, Note
 from sqlalchemy.orm import Session
 import datetime
@@ -28,7 +28,7 @@ app = FastAPI()
 
 SECRET_KEY = "hello world"
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+ACCESS_TOKEN_EXPIRE_MINUTES = 180
 
 
 app.add_middleware(
@@ -48,14 +48,6 @@ def verify_password(plain_password, hashed_password):
 
 def get_password_hash(password):
     return pwd_context.hash(password)
-
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 
 @app.get("/")
