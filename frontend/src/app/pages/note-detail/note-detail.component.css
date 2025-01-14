@@ -1,0 +1,38 @@
+.note-detail-body{
+  display: flex;
+  background-color: rgb(32, 28, 36);;
+  height: 100vh;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+input{
+  background-color: hsla(276, 100%, 82%, 0.561);
+  border: none;
+  border-bottom: black solid 2px;
+  border-top: black solid 2px;
+  font-size: 30px;
+  width: 800px;
+  height: 40px;
+}
+
+textarea{
+  border: none;
+  width: 800px;
+  height: 400px;
+  resize: none;
+  font-size: 16px;
+}
+
+button{
+  border-radius: 5px;
+  height: 25px;
+  width: 100px;
+}
+
+.div-button{
+  display: flex;
+  width: 805px;
+  justify-content: flex-end;
+}

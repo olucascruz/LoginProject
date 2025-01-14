@@ -1,12 +1,12 @@
-<p>note-detail works!</p>
-<div >
+<div class="note-detail-body">
   <div *ngIf="note$ | async as note; else loading">
-  <input type="text" [value]="note.title" #titleInput >
-  <!-- <p>{{note.title}}</p> -->
-  <br>
-  <textarea name="" #contentInput>{{ note.content }}</textarea>
-  <br>
+    <input type="text" [value]="note.title" #titleInput >
+    <br>
+    <textarea name="" #contentInput>{{ note.content }}</textarea>
+    <br>
+  <div class="div-button">
   <button (click)="saveNote(note.id, titleInput.value, contentInput.value)">Save</button>
+  </div>
   </div>
 
   <ng-template #loading>
