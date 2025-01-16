@@ -2,17 +2,15 @@ from backend.data_modules.database import get_db
 from backend.data_modules.models import User, Note
 from sqlalchemy.orm import Session
 import datetime
-from sqlalchemy.exc import SQLAlchemyError, IntegrityError, DataError
-from fastapi.responses import JSONResponse
-from schemas import UserSchema, UserPublic, NoteSchema
+from backend.schemas import NoteSchema
 from typing import Annotated
 from fastapi import APIRouter, Form, Depends, HTTPException
-from auth import get_current_user
+from .auth import get_current_user
 from datetime import timezone
 
-router = APIRouter(prefix='/note', tags=['users'])
+router = APIRouter(prefix='/note', tags=['notes'])
 
-@router.post("/note", status_code=201, response_model=NoteSchema)
+@router.post("/", status_code=201, response_model=NoteSchema)
 async def create_note( 
     current_user: Annotated[User, Depends(get_current_user)],
     note_title: str = Form(...),
@@ -26,7 +24,7 @@ async def create_note(
 
     return db_note
 
-@router.get("/note", response_model=list[NoteSchema])
+@router.get("/", response_model=list[NoteSchema])
 async def get_all_notes(
     current_user: Annotated[User, Depends(get_current_user)],
     db:Session = Depends(get_db),
@@ -36,7 +34,7 @@ async def get_all_notes(
     
     return notes
 
-@router.get("/note/{note_id}", response_model=NoteSchema)
+@router.get("/{note_id}", response_model=NoteSchema)
 async def get_note_by_id(
     current_user: Annotated[User, Depends(get_current_user)],
     note_id: int,
@@ -51,7 +49,7 @@ async def get_note_by_id(
     return note
 
 
-@router.put("/note/{note_id}")
+@router.put("/{note_id}")
 async def update_note(
     current_user: Annotated[User, Depends(get_current_user)],
     note_id: int,
@@ -75,7 +73,7 @@ async def update_note(
     return note
 
 
-@router.delete("/note/{note_id}")
+@router.delete("/{note_id}")
 async def delete_note(
     current_user: Annotated[User, Depends(get_current_user)],
     note_id: int,

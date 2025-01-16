@@ -1,16 +1,13 @@
-from http import HTTPStatus
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException, Query
-from sqlalchemy import select
-from sqlalchemy.exc import IntegrityError
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from backend.data_modules.database import get_session
 from backend.data_modules.models import User
 
 from backend.schemas import UserPublic, UserSchema
-from auth import get_current_user, get_password_hash
+from .auth import get_current_user, get_password_hash
 
 
 router = APIRouter(prefix='/users', tags=['users'])

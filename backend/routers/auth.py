@@ -11,7 +11,7 @@ from passlib.context import CryptContext
 from backend.data_modules.database import get_session
 from backend.data_modules.models import User
 from jwt.exceptions import InvalidTokenError
-from schemas import TokenData, Token
+from backend.schemas import TokenData, Token
 
 SECRET_KEY = "hello world"
 ALGORITHM = "HS256"
