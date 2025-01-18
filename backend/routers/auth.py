@@ -19,7 +19,7 @@ router = APIRouter(prefix='/auth', tags=['auth'])
 
 DbSession = Annotated[Session, Depends(get_session)]
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
-OAuth2Form = Annotated[OAuth2PasswordRequestForm, Depends(oauth2_scheme)]
+OAuth2Form = Annotated[OAuth2PasswordRequestForm, Depends()]
 
 
 @router.post("/login", status_code=200, response_model=TokenSchema)
