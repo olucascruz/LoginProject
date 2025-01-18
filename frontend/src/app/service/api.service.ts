@@ -19,6 +19,14 @@ export interface NoteResponse {
   updated_at: string;
 }
 
+export interface DeleteResponse {
+  message:string
+}
+
+export interface TokenResponse {
+  access_token:string;
+  token_type:string;
+}
 
 
 @Injectable({
@@ -54,32 +62,31 @@ export class ApiService {
   constructor(private http: HttpClient) {}
 
   register(data: FormData): Observable<RegisterResponse> {
-    const url = this.apiUrl+'register'
+    const url = this.apiUrl+'users/register'
     return this.http.post<RegisterResponse>(url, data);
   }
 
-  login(data: FormData): Observable<any> {
-    const url = this.apiUrl+'login'
-    return this.http.post<any>(url, data);
+  login(data: FormData): Observable<TokenResponse> {
+    const url = this.apiUrl+'auth/login'
+    return this.http.post<TokenResponse>(url, data);
   }
 
-  createNote(formTitle:FormData): Observable<any>{
+  createNote(formTitle:FormData): Observable<NoteResponse>{
     const url = this.apiUrl+'note'
     const headers = this.getHeaders()
-    return this.http.post<any>(url, formTitle, {headers});
+    return this.http.post<NoteResponse>(url, formTitle, {headers});
   }
 
-  updateNote(id:number, dataNote:FormData): Observable<any>{
+  updateNote(id:number, dataNote:FormData): Observable<NoteResponse>{
     const url = this.apiUrl+'note/'+id.toString()
     const headers = this.getHeaders()
-    return this.http.put<any>(url, dataNote, {headers});
+    return this.http.put<NoteResponse>(url, dataNote, {headers});
   }
 
   getNotes(): Observable<NoteResponse[]> | null{
     const url = this.apiUrl+'note'
     const headers = this.getHeaders()
     const response = this.http.get<NoteResponse[]>(url, {headers});
-    console.log(response)
     return response
   }
 
@@ -89,9 +96,9 @@ export class ApiService {
     return this.http.get<NoteResponse>(url, {headers});
   }
 
-  deleteNote(id: number):any{
+  deleteNote(id: number):Observable<DeleteResponse>{
     const url = `${this.apiUrl}note/${id}`;
     const headers = this.getHeaders()
-    return this.http.delete<NoteResponse>(url, {headers});
+    return this.http.delete<DeleteResponse>(url, {headers});
   }
 }
