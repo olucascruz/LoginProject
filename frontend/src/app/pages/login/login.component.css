@@ -10,7 +10,7 @@
 
 .login-body > * {
   position: relative;
-  z-index: 2; /* Mantém o conteúdo acima do fundo */
+  z-index: 2;
 }
 h1{
   color: #ffde59;
