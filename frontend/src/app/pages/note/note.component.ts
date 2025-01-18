@@ -14,7 +14,6 @@ export class NoteComponent implements OnInit{
   ngOnInit(): void {
     console.log(localStorage.getItem("accessToken"))
      this.notes$ = this.service.getNotes()
-     console.log(this.notes$)
   }
   goToNoteDetail(id:number):void{
     this.router.navigate([`/note/${id}`]);
@@ -23,42 +22,30 @@ export class NoteComponent implements OnInit{
   createNote(noteTitle:string):void{
     const formData = new FormData();
     formData.append('note_title', noteTitle);
-    console.log(formData)
-    const response = this.service.createNote(formData).subscribe(
-      (response: any) => {
-        console.log('Resposta do servidor:', response);
-        this.notes$ = this.service.getNotes()
-        this.notes$?.subscribe((response)=>{
-          console.log(response)
-          const endIndex = response.length - 1
-          // this.goToNoteDetail(response[endIndex].id)
-        }, (err)=>{
-          console.warn(err)
-        })
 
-      },
-      (error:any) => {
-        console.error('Erro ao enviar os dados:', error);
+    this.service.createNote(formData).subscribe({
+      next: (v) => console.log(v),
+      error: (e) => console.error(e),
+      complete: () => {
+        this.notes$ = this.service.getNotes()
+        console.info('complete')
       }
-    );
+  });
+
+
   }
 
   deleteNote(id:number):void{
-    this.service.deleteNote(id).subscribe(
-      (response: any) => {
+    this.service.deleteNote(id).subscribe({
+      next:(response) => {
         console.log('Resposta do servidor:', response);
+        },
+      error:(e)=> console.error(e),
+      complete: () => {
         this.notes$ = this.service.getNotes()
-        this.notes$?.subscribe((response)=>{
-          console.log(response)
-        }, (err)=>{
-          console.warn(err)
-        })
-
-      },
-      (error:any) => {
-        console.error('Erro ao enviar os dados:', error);
+        console.info('complete')
       }
-    );
+    });
   }
 
 

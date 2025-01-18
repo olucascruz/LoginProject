@@ -10,10 +10,10 @@ export class LoginComponent implements OnInit{
   ngOnInit(): void {
     localStorage.removeItem("accessToken")
   }
-    isRegisterForm = false; // Inicialmente exibe o formulário de Login
+    isRegisterForm = false;
 
     toggleForm() {
-      this.isRegisterForm = !this.isRegisterForm; // Alterna entre true e false
+      this.isRegisterForm = !this.isRegisterForm;
     }
 
     registerUser(user: string, password: string, confirmPassword:string) {
@@ -32,6 +32,15 @@ export class LoginComponent implements OnInit{
           console.error('Erro ao enviar os dados:', error);
         }
       );
+
+
+      this.service.register(formData).subscribe({
+        next:(v) => {
+          console.log(v)
+        },
+        error:(e) => console.error(e),
+        complete:() => console.info('created')
+      });
     }
 
     login(user: string, password: string) {
@@ -39,19 +48,18 @@ export class LoginComponent implements OnInit{
       const formData = new FormData();
       formData.append('username', user);
       formData.append('password', password);
-      this.service.login(formData).subscribe(
-        (response: any) => {
-          console.log('Resposta do servidor:', response);
-          // Salvar o token no localStorage
+
+      this.service.login(formData).subscribe({
+        next:(response) => {
           localStorage.setItem("accessToken", response.access_token);
+        },
+        error:(e) => console.error(e),
+        complete:() => {
           if(localStorage.getItem("accessToken") != null){
             window.location.href = "/notes"
           }
-        },
-        (error:any) => {
-          console.error('Erro ao enviar os dados:', error);
         }
-      );
+      });
 
 
     }

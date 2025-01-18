@@ -52,8 +52,6 @@ margin-top: 0;
   margin-left: 10px;
   height: 50px;
   text-align: center;
-  /* background-color: rgb(255, 5, 5); */
-
 }
 
 .deleteButton:hover{
@@ -70,6 +68,7 @@ margin-top: 0;
   font-size: 25px;
 }
 .create-button:hover{
+  color: antiquewhite;
   cursor: pointer;
   box-shadow: rgba(255, 255, 255, 0.25) 0px 54px 55px, rgba(255, 255, 255, 0.12) 0px -12px 30px, rgba(255, 255, 255, 0.12) 0px 4px 6px, rgba(255, 255, 255, 0.17) 0px 12px 13px, rgba(255, 255, 255, 0.09) 0px -3px 5px;
 
@@ -82,4 +81,8 @@ margin-top: 0;
   font-size: 20px;
   border: none;
   border-bottom: #000 solid 2px;
+}
+
+.no-note-p{
+  color: antiquewhite;
 }
