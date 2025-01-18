@@ -1,5 +1,9 @@
 from pydantic import BaseModel
 from datetime import datetime
+
+class MessageSchema(BaseModel):
+    message: str
+
 class UserSchema(BaseModel):
     username: str
     password: str
@@ -17,10 +21,9 @@ class NoteSchema(BaseModel):
     updated_at:datetime
 
 
-
-class Token(BaseModel):
+class TokenSchema(BaseModel):
     access_token: str
     token_type: str
 
-class TokenData(BaseModel):
+class TokenDataSchema(BaseModel):
     username: str | None = None
