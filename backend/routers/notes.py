@@ -1,20 +1,22 @@
-from backend.data_modules.database import get_db
+from backend.data_modules.database import get_db, get_session
 from backend.data_modules.models import User, Note
 from sqlalchemy.orm import Session
 import datetime
 from backend.schemas import NoteSchema, MessageSchema
 from typing import Annotated
 from fastapi import APIRouter, Form, Depends, HTTPException
-from .auth import get_current_user
+from backend.security import get_current_user
 from datetime import timezone
 
 router = APIRouter(prefix='/note', tags=['notes'])
+DbSession = Annotated[Session, Depends(get_session)]
+CurrentUser = Annotated[User, Depends(get_current_user)]
 
 @router.post("/", status_code=201, response_model=NoteSchema)
 async def create_note( 
-    current_user: Annotated[User, Depends(get_current_user)],
-    note_title: str = Form(...),
-    db:Session = Depends(get_db)
+    current_user: CurrentUser,
+    db:DbSession,
+    note_title: str = Form(...)
     ):
 
     db_note = Note(user_id=current_user.id, title=note_title, content="")
@@ -26,8 +28,8 @@ async def create_note(
 
 @router.get("/", response_model=list[NoteSchema])
 async def get_all_notes(
-    current_user: Annotated[User, Depends(get_current_user)],
-    db:Session = Depends(get_db),
+    current_user: CurrentUser,
+    db:DbSession,
     ):
     notes = db.query(Note).filter(Note.user_id == current_user.id).all()
 
@@ -36,9 +38,9 @@ async def get_all_notes(
 
 @router.get("/{note_id}", response_model=NoteSchema)
 async def get_note_by_id(
-    current_user: Annotated[User, Depends(get_current_user)],
+    current_user: CurrentUser,
     note_id: int,
-    db:Session = Depends(get_db)
+    db:DbSession
     ):
     
     note = db.query(Note).filter(
@@ -51,11 +53,11 @@ async def get_note_by_id(
 
 @router.put("/{note_id}", response_model=NoteSchema)
 async def update_note(
-    current_user: Annotated[User, Depends(get_current_user)],
+    current_user: CurrentUser,
     note_id: int,
+    db:DbSession,
     note_title: str = Form(...),
-    note_content: str = Form(...),
-    db:Session = Depends(get_db)):
+    note_content: str = Form(...)):
 
     note = db.query(Note).filter(Note.id == note_id, Note.user_id == current_user.id).first()
     
@@ -75,9 +77,9 @@ async def update_note(
 
 @router.delete("/{note_id}", response_model=MessageSchema)
 async def delete_note(
-    current_user: Annotated[User, Depends(get_current_user)],
+    current_user: CurrentUser,
     note_id: int,
-    db: Session = Depends(get_db)):
+    db: DbSession):
     # Busca a nota no banco de dados
     note = db.query(Note).filter(Note.id == note_id, Note.user_id == current_user.id).first()
     

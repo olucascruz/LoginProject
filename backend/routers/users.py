@@ -7,7 +7,7 @@ from backend.data_modules.database import get_session
 from backend.data_modules.models import User
 
 from backend.schemas import UserPublic, UserSchema
-from .auth import get_current_user, get_password_hash
+from backend.security import get_current_user, get_password_hash
 
 
 router = APIRouter(prefix='/users', tags=['users'])

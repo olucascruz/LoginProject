@@ -4,7 +4,9 @@ from fastapi.middleware.cors import CORSMiddleware
 import os
 from .data_modules.models import User
 from .routers import auth, notes, users
-from .routers.auth import get_current_user
+from .security import get_current_user
+
+
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
 
 # Diretório onde os arquivos serão salvos
