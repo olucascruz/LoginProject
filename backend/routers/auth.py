@@ -11,15 +11,14 @@ from passlib.context import CryptContext
 from backend.data_modules.database import get_session
 from backend.data_modules.models import User
 from jwt.exceptions import InvalidTokenError
-from backend.schemas import TokenData, Token
+from backend.schemas import TokenDataSchema, TokenSchema
 
 SECRET_KEY = "hello world"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 180
-# oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 router = APIRouter(prefix='/auth', tags=['auth'])
-
-OAuth2Form = Annotated[OAuth2PasswordRequestForm, Depends()]
+OAuth2Form = Annotated[OAuth2PasswordRequestForm, Depends(oauth2_scheme)]
 DbSession = Annotated[Session, Depends(get_session)]
 
 
@@ -48,9 +47,9 @@ def authenticate_user(username: str, password: str, db):
 def create_access_token(data: dict, expires_delta: timedelta | None = None):
     to_encode = data.copy()
     if expires_delta:
-        expire = datetime.datetime.now(timezone.utc) + expires_delta
+        expire = datetime.now(timezone.utc) + expires_delta
     else:
-        expire = datetime.datetime.now(timezone.utc) + timedelta(minutes=15)
+        expire = datetime.now(timezone.utc) + timedelta(minutes=15)
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
@@ -68,7 +67,7 @@ async def get_current_user(
         username: str = payload.get("sub")
         if username is None:
             raise credentials_exception
-        token_data = TokenData(username=username)
+        token_data = TokenDataSchema(username=username)
     except InvalidTokenError:
         raise credentials_exception
     user = get_user(username=token_data.username, db=db)
@@ -77,7 +76,7 @@ async def get_current_user(
     return user
 
 
-@router.post("/login", status_code=200)
+@router.post("/login", status_code=200, response_model=TokenSchema)
 async def login(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
     db:DbSession
@@ -94,4 +93,4 @@ async def login(
         data={"sub": user.username}, expires_delta=access_token_expires
     )
 
-    return Token(access_token=access_token, token_type="bearer")
+    return TokenSchema(access_token=access_token, token_type="bearer")

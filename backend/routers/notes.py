@@ -2,7 +2,7 @@ from backend.data_modules.database import get_db
 from backend.data_modules.models import User, Note
 from sqlalchemy.orm import Session
 import datetime
-from backend.schemas import NoteSchema
+from backend.schemas import NoteSchema, MessageSchema
 from typing import Annotated
 from fastapi import APIRouter, Form, Depends, HTTPException
 from .auth import get_current_user
@@ -49,7 +49,7 @@ async def get_note_by_id(
     return note
 
 
-@router.put("/{note_id}")
+@router.put("/{note_id}", response_model=NoteSchema)
 async def update_note(
     current_user: Annotated[User, Depends(get_current_user)],
     note_id: int,
@@ -73,7 +73,7 @@ async def update_note(
     return note
 
 
-@router.delete("/{note_id}")
+@router.delete("/{note_id}", response_model=MessageSchema)
 async def delete_note(
     current_user: Annotated[User, Depends(get_current_user)],
     note_id: int,
