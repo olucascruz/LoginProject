@@ -1,4 +1,7 @@
 <div class="note-detail-body">
+  <div *ngIf="showToast" class="toast">
+      <p>Saved</p>
+  </div>
   <div *ngIf="note$ | async as note; else loading">
     <input type="text" [value]="note.title" #titleInput >
     <br>

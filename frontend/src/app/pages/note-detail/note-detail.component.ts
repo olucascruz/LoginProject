@@ -10,6 +10,7 @@ import { Observable } from 'rxjs';
 })
 export class NoteDetailComponent {
   note$!: Observable<NoteResponse>;
+  showToast = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -19,7 +20,6 @@ export class NoteDetailComponent {
   ngOnInit(): void {
     const noteId = Number(this.route.snapshot.paramMap.get('id'));
     this.note$ = this.service.getNoteById(noteId);
-
   }
 
   saveNote(id:number, noteTitle:string, noteContent:string){
@@ -27,14 +27,20 @@ export class NoteDetailComponent {
     formData.append('note_title', noteTitle);
     formData.append('note_content', noteContent);
 
-    this.service.updateNote(id, formData).subscribe(
-      (response: any) => {
-        console.log('Resposta do servidor:', response);
-      },
-      (error:any) => {
-        console.error('Erro ao enviar os dados:', error);
+
+
+    this.service.updateNote(id, formData).subscribe({
+      next: (v) => console.log(v),
+      error: (e) => console.error(e),
+      complete: () => {
+        if(!this.showToast){
+          this.showToast = true;
+          setTimeout(() => {
+            this.showToast = false;
+          }, 2000);
+        }
       }
-    );
+    });
   }
 
 }
