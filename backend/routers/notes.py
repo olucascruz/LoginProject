@@ -1,4 +1,4 @@
-from backend.data_modules.database import get_db, get_session
+from backend.data_modules.database import get_session
 from backend.data_modules.models import User, Note
 from sqlalchemy.orm import Session
 import datetime
