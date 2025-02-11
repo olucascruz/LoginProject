@@ -1,21 +1,19 @@
 from datetime import timedelta
 from typing import Annotated
-
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-import jwt
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
-from sqlalchemy import select
 from sqlalchemy.orm import Session
-from passlib.context import CryptContext
 from backend.data_modules.database import get_session
 from backend.schemas import TokenSchema
-from backend.security import create_access_token, authenticate_user
+from backend.security import create_access_token, authenticate_user, get_current_user
+from backend.data_modules.models import User
 
 SECRET_KEY = "hello world"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 180
 router = APIRouter(prefix='/auth', tags=['auth'])
+CurrentUser = Annotated[User, Depends(get_current_user)]
 
 DbSession = Annotated[Session, Depends(get_session)]
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
@@ -40,3 +38,12 @@ async def login(
     )
 
     return TokenSchema(access_token=access_token, token_type="bearer")
+
+
+@router.post('/refresh_token', response_model=TokenSchema)
+def refresh_access_token(
+    user: CurrentUser,
+):
+    new_access_token = create_access_token(data={'sub': user.username})
+
+    return {'access_token': new_access_token, 'token_type': 'bearer'}
