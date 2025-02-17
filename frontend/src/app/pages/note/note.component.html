@@ -1,7 +1,7 @@
 <div class="note-body">
 
 <input class="input-title" type="text" placeholder="Title note" #new_title_note>
-<button class="create-button" (click)="createNote(new_title_note.value)">+</button>
+<button type="button" class="create-button" (click)="createNote(new_title_note.value)">+</button>
 <div *ngIf="notes$ | async as notes; else loading">
   <ng-container *ngIf="notes.length > 0; else noNotes">
     <ul >

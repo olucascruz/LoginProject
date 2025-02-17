@@ -2,14 +2,14 @@
   <div *ngIf="showToast" class="toast">
       <p>Saved</p>
   </div>
-  <div *ngIf="note$ | async as note; else loading">
+  <div *ngIf="note$ | async as note; else loading" class="note-content">
     <input type="text" [value]="note.title" #titleInput >
     <br>
     <textarea name="" #contentInput>{{ note.content }}</textarea>
     <br>
-  <div class="div-button">
-  <button (click)="saveNote(note.id, titleInput.value, contentInput.value)">Save</button>
-  </div>
+    <div class="div-button">
+      <button (click)="saveNote(note.id, titleInput.value, contentInput.value)">Save</button>
+    </div>
   </div>
 
   <ng-template #loading>

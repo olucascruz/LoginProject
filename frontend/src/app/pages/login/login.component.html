@@ -17,7 +17,7 @@
       <p>
         <button type="button" (click)="login(user.value, password.value)">Login</button>
         <button type="button" (click)="toggleForm()">
-          {{ isRegisterForm ? 'Go to Login' : 'Go to Register' }}
+          {{ isRegisterForm ? 'Login' : 'Register' }}
         </button>
       </p>
     </form>
@@ -44,7 +44,7 @@
           Register
         </button>
         <button type="button" (click)="toggleForm()">
-          {{ isRegisterForm ? 'Go to Login' : 'Go to Register' }}
+          {{ isRegisterForm ? 'Login' : 'Register' }}
         </button>
       </p>
     </form>
