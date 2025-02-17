@@ -16,11 +16,6 @@ os.makedirs(UPLOAD_DIRECTORY, exist_ok=True)  # Cria a pasta se não existir
 
 app = FastAPI()
 
-SECRET_KEY = "hello world"
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 180
-
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # Domínios permitidos
