@@ -12,8 +12,7 @@ export class NoteComponent implements OnInit{
   notes$!: Observable<NoteResponse[]> | null;
   constructor(private service: ApiService,  private router: Router) {}
   ngOnInit(): void {
-    console.log(localStorage.getItem("accessToken"))
-     this.notes$ = this.service.getNotes()
+    this.notes$ = this.service.getNotes()
   }
   goToNoteDetail(id:number):void{
     this.router.navigate([`/note/${id}`]);

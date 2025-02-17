@@ -24,15 +24,7 @@ export class LoginComponent implements OnInit{
       const formData = new FormData();
       formData.append('user', user);
       formData.append('password', password);
-      this.service.register(formData).subscribe(
-        (response: any) => {
-          console.log('Resposta do servidor:', response);
-        },
-        (error:any) => {
-          console.error('Erro ao enviar os dados:', error);
-        }
-      );
-
+      
 
       this.service.register(formData).subscribe({
         next:(v) => {
